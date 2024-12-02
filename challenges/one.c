@@ -16,7 +16,7 @@ t_lst **makelist(int step, int start)
 	int size = sizeof(input) / sizeof(input[0]);
     while (i < size)
 	{
-		node = ft_lstnew(input[i]);
+		node = ft_lstnew_int(input[i]);
 		ft_lstadd_back(head, node);
 		i += step;
 	}

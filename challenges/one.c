@@ -102,13 +102,10 @@ int aoc_2(t_lst *a, t_lst *b)
     }
     return (result);
 }
-
 // --------------- MAIN --------------------
 
-int	main(int argc, char *argv[])
+int	main(void)
 {
-	(void)argc;
-	(void)argv;
 	t_lst *a = *makelist(2, 0);
 	t_lst *b = *makelist(2, 1);
 	int delta = aoc_1(a, b);

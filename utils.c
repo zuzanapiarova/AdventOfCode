@@ -61,3 +61,95 @@ void lst_free(t_lst **head)
     }
     *head = NULL;
 }
+
+int	get_arr_size(char **arr)
+{
+	int		i;
+
+	if (!arr || !(*arr))
+		return (0);
+	i = 0;
+	while (arr[i])
+		i++;
+	return (i);
+}
+
+
+static int	words_len(char *str, char c)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i] != '\0')
+	{
+		while (str[i] == c)
+			i++;
+		if (str[i] != '\0')
+			count++;
+		while (str[i] != '\0' && str[i] != c)
+			i++;
+	}
+	return (count);
+}
+
+static char	*ft_strndub(char *src, int n)
+{
+	char	*res;
+	int		i;
+
+	i = 0;
+	res = (char *)malloc((n + 1) * sizeof(char));
+	if (!res)
+		return (NULL);
+	while (i < n)
+	{
+		res[i] = src[i];
+		i += 1;
+	}
+	res[i] = '\0';
+	return (res);
+}
+
+char	**ft_split(char const *s, char c)
+{
+	int		i;
+	int		word_len;
+	char	**split;
+	int		current_word;
+
+	if (!s)
+		return (NULL);
+	split = (char **)malloc(sizeof(char *) * (words_len((char *)s, c) + 1));
+	if (!split)
+		return (NULL);
+	current_word = 0;
+	while (*s)
+	{
+		while (*s == c)
+			s++;
+		i = 0;
+		while (s[i] != '\0' && s[i] != c)
+			i++;
+		word_len = i;
+		if (word_len > 0)
+			split[current_word++] = ft_strndub((char *)s, word_len);
+		s += word_len;
+	}
+	split[current_word] = NULL;
+	return (split);
+}
+
+void free_arr(char **arr)
+{
+    int i = 0;
+
+    while (arr[i])
+    {
+        free(arr[i]);
+        i++;
+    }
+    free(arr);
+    arr = NULL;
+}

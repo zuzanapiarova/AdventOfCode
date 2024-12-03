@@ -2,6 +2,7 @@
 # define AOC_H
 #include <stdio.h>
 #include <libc.h>
+#include <stdlib.h>
 #include "aoc.h"
 #include "libft/libft.h"
 

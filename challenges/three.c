@@ -1,8 +1,5 @@
 #include "../aoc.h"
 
-#define MAX_LINES 100
-#define MAX_LINE_LENGTH 1024
-
 int is_valid(char *str)
 {
     int i = 0;
@@ -15,7 +12,7 @@ int is_valid(char *str)
     return (1);
 }
 
-int find_val(char *str) // (45,67) or (!5, 8]dskjn!)
+int find_val(char *str)
 {
     int i = 0;
     int res = 0;
@@ -44,7 +41,7 @@ int find_val(char *str) // (45,67) or (!5, 8]dskjn!)
     return (res);
 }
 
-int process_input(char *input)
+int process_input(char *input, int *do_flag)
 {
     int res = 0;
     int start = 0;
@@ -52,11 +49,53 @@ int process_input(char *input)
     char *temp;
     int i = -1;
     int val = 0;
+
+// ---------------------------- second part addition below -----------------------------
     while (input[++i])
     {
         len = 0;
-        //printf("i: %d %c\n", i, input[i]);
-        if (input[i] && input[i] == 'm')
+        if (input[i] && input[i] == 'd')
+        {
+            i++;
+            if (input[i] && input[i] == 'o')
+            {
+                i++;
+                if (input[i] && input[i] == '(')
+                {
+                    i++;
+                    if (input[i] && input[i] == ')')
+                    {
+                        i++;
+                        *do_flag = 1;
+                        printf("--- DO ---\n");
+                    }
+                }
+                else if (input[i] && input[i] == 'n')
+                {
+                    i++;
+                    if (input[i] && input[i] == '\'')
+                    {
+                        i++;
+                        if (input[i] && input[i] == 't')
+                        {
+                            i++;
+                            if (input[i] && input[i] == '(')
+                            {
+                                i++;
+                                if (input[i] && input[i] == ')')
+                                {
+                                    i++;
+                                    *do_flag = 0;
+                                    printf("--- DONT ---\n");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+// -------------------------- second part addition above --------------------------------
+        if (input[i] && input[i] == 'm' && *do_flag == 1)
         {
             i++;
             if (input[i] && input[i] == 'u')
@@ -73,7 +112,7 @@ int process_input(char *input)
                         start = i;
                         while (input[i] && input[i] != ')')
                         {
-                            if (input[i] == 'm')
+                            if (input[i] == 'm' || input[i] == 'd')
                             {
                                 i--;
                                 break ;
@@ -98,47 +137,38 @@ int process_input(char *input)
     return (res);
 }
 
-
-// 170497160 too low
-// 172921095 wrong
-int main() {
-    FILE *file = fopen("inputs/input3.txt", "r");
-    if (!file) {
-        perror("Error opening file");
-        return 1;
-    }
-
+int main()
+{
     char *stored_lines[MAX_LINES];
     int line_count = 0;
+    int do_flag = 1;
 
-    while (line_count < MAX_LINES) {
+    FILE *file = fopen("inputs/input", "r");
+    if (!file)
+        return (perror("Error opening file"), 1);
+    while (line_count < MAX_LINES)
+    {
         char buffer[MAX_LINE_LENGTH];
-        if (fgets(buffer, MAX_LINE_LENGTH, file) == NULL) {
-            break; // End of file or error
-        }
-
-        // Store each line dynamically
+        if (fgets(buffer, MAX_LINE_LENGTH, file) == NULL) // end of file or error
+            break ;
         stored_lines[line_count] = strdup(buffer);
-        if (stored_lines[line_count] == NULL) {
+        if (stored_lines[line_count] == NULL)
+        {
             perror("Memory allocation error");
-            break;
+            break ;
         }
         line_count++;
     }
-
     fclose(file);
+// ----------------------------
     long res = 0;
     int val = 0;
-    // Reuse stored input
-    //val = process_input(stored_lines[9]);
-
-    printf("Stored input lines:\n");
     for (int i = 0; i < line_count; i++)
     {
-        val = process_input(stored_lines[i]);
+        val = process_input(stored_lines[i], &do_flag);
         res += val;
-        printf("val: %d\n", val);
-        free(stored_lines[i]); // Free allocated memory
+       // printf("val: %d\n", val);
+        free(stored_lines[i]);
     }
     printf("res: %ld\n", res);
     return (res);

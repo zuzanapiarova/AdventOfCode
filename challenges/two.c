@@ -141,6 +141,8 @@ int check_safety_decr(char **arr)
     return (0);
 }
 
+// --------------- MAIN -------------------------
+
 int main(int argc, char **argv)
 {
     (void)argc;
@@ -158,6 +160,6 @@ int main(int argc, char **argv)
         i++;
     }
     free_arr(arr);
-    printf("safe: %d\n", safe);
-    return (0);
+    //printf("safe: %d\n", safe);
+    return (safe);
 }
